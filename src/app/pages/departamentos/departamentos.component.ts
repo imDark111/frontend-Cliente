@@ -54,8 +54,8 @@ export class DepartamentosComponent implements OnInit {
       const imagenValida = depto.imagenes.find(img => 
         img.url && (img.url.startsWith('http://') || img.url.startsWith('https://') || img.url.startsWith('/'))
       );
-      return imagenValida ? imagenValida.url : 'assets/placeholder-room.jpg';
+      return imagenValida ? imagenValida.url : 'assets/placeholder-room.svg';
     }
-    return 'assets/placeholder-room.jpg';
+    return 'assets/placeholder-room.svg';
   }
 }

@@ -6,6 +6,8 @@
     "start": "ng serve",
     "start:local": "ng serve --host 0.0.0.0",
     "build": "ng build",
+    "build:prod": "ng build --configuration production --base-href /frontend-Cliente/ && node scripts/create-404.js",
+    "deploy": "npm run build:prod && npx angular-cli-ghpages --dir=dist/frontend-cliente/browser",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -39,6 +41,7 @@
     "@angular/cli": "^20.2.1",
     "@angular/compiler-cli": "^20.2.0",
     "@types/jasmine": "~5.1.0",
+    "angular-cli-ghpages": "^2.0.3",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
