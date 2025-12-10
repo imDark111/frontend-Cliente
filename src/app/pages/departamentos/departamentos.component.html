@@ -1,0 +1,81 @@
+<div class="departamentos-container">
+  <header class="page-header">
+    <h1>Nuestras Habitaciones</h1>
+    <p>Encuentra el espacio perfecto para tu estancia</p>
+  </header>
+
+  <div class="container">
+    @if (cargando) {
+      <div class="loading">
+        <p>Cargando habitaciones...</p>
+      </div>
+    }
+
+    @if (!cargando) {
+      <div class="departamentos-grid">
+      <div class="depto-card" *ngFor="let depto of departamentos">
+        <div class="depto-image">
+          <img [src]="getImagenPrincipal(depto)" [alt]="'Habitación ' + depto.numero" />
+          <span class="badge">{{ depto.tipo | titlecase }}</span>
+        </div>
+        
+        <div class="depto-content">
+          <h3>Habitación {{ depto.numero }}</h3>
+          <p class="description">{{ depto.descripcion || 'Habitación cómoda y equipada' }}</p>
+          
+          <div class="depto-info">
+            <div class="info-item">
+              <span class="icon">👥</span>
+              <span>{{ depto.capacidadPersonas }} personas</span>
+            </div>
+            <div class="info-item">
+              <span class="icon">🛏️</span>
+              <span>{{ depto.numeroCamas }} cama(s) {{ depto.tipoCamas }}</span>
+            </div>
+            <div class="info-item">
+              <span class="icon">🏛️</span>
+              <span>Piso {{ depto.piso }}</span>
+            </div>
+          </div>
+
+          <div class="amenities">
+            @if (depto.caracteristicas.wifi) {
+              <span class="amenity">📶 WiFi</span>
+            }
+            @if (depto.caracteristicas.televisor) {
+              <span class="amenity">📺 TV</span>
+            }
+            @if (depto.caracteristicas.aireAcondicionado) {
+              <span class="amenity">❄️ A/C</span>
+            }
+            @if (depto.caracteristicas.balcon) {
+              <span class="amenity">🌿 Balcón</span>
+            }
+            @if (depto.caracteristicas.banoPrivado) {
+              <span class="amenity">🚿 Baño</span>
+            }
+            @if (depto.caracteristicas.minibar) {
+              <span class="amenity">🧊 Minibar</span>
+            }
+          </div>
+
+          <div class="depto-footer">
+            <div class="price">
+              <span class="price-label">Desde</span>
+              <span class="price-amount">{{ formatearMoneda(depto.precioNoche) }}</span>
+              <span class="price-period">/noche</span>
+            </div>
+            <a [routerLink]="['/departamentos', depto.id]" class="btn btn-primary">Ver Detalles</a>
+          </div>
+        </div>
+      </div>
+      </div>
+    }
+
+    @if (!cargando && departamentos.length === 0) {
+      <div class="empty-state">
+        <p>No hay habitaciones disponibles en este momento.</p>
+      </div>
+    }
+  </div>
+</div>

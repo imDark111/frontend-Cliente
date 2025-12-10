@@ -1,0 +1,52 @@
+<div class="home-container">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Bienvenido a Hotel Paraíso Verde</h1>
+      <p>Tu oasis de tranquilidad y confort</p>
+      <div class="hero-actions">
+        <button (click)="navegarDepartamentos()" class="btn btn-secondary"> Ver Habitaciones </button>
+        <button (click)="navegarLogin()" class="btn btn-secondary">Iniciar Sesión</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <h2>¿Por qué elegirnos?</h2>
+      <div class="features-grid">
+        <div class="feature-card" *ngFor="let feature of features">
+          <div class="feature-icon">{{ feature.icon }}</div>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials">
+    <div class="container">
+      <h2>Lo que dicen nuestros clientes</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-card" *ngFor="let testimonio of testimonios">
+          <div class="rating">
+            <span *ngFor="let star of [1,2,3,4,5]">⭐</span>
+          </div>
+          <p class="comment">"{{ testimonio.comentario }}"</p>
+          <p class="author">- {{ testimonio.nombre }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="container">
+      <h2>¿Listo para tu próxima estancia?</h2>
+      <p>Reserva ahora y obtén los mejores precios</p>
+      <button (click)="navegarDepartamentos()" class="btn btn-large">Explorar Habitaciones</button>
+    </div>
+  </section>
+</div>

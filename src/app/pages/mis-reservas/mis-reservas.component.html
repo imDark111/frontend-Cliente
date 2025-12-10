@@ -1,0 +1,63 @@
+<div class="reservas-container">
+  <header class="page-header">
+    <h1>Mis Reservas</h1>
+    <p>Gestiona todas tus reservaciones</p>
+  </header>
+
+  <div class="container">
+    <div *ngIf="cargando" class="loading">
+      <p>Cargando reservas...</p>
+    </div>
+
+    <div class="reservas-list" *ngIf="!cargando">
+      <div class="reserva-card" *ngFor="let reserva of reservas">
+        <div class="reserva-header">
+          <div>
+            <h3>{{ reserva.codigoReserva }}</h3>
+            <span class="estado-badge" [style.background-color]="obtenerColorEstado(reserva.estado)">
+              {{ reserva.estado }}
+            </span>
+          </div>
+        </div>
+
+        <div class="reserva-body">
+          <div class="info-group">
+            <span class="label">📅 Fechas:</span>
+            <span>{{ formatearFecha(reserva.fechaInicio) }} - {{ formatearFecha(reserva.fechaFin) }}</span>
+          </div>
+          
+          <div class="info-group">
+            <span class="label">🌙 Noches:</span>
+            <span>{{ reserva.numeroNoches }}</span>
+          </div>
+          
+          <div class="info-group">
+            <span class="label">👥 Huéspedes:</span>
+            <span>{{ reserva.numeroHuespedes }}</span>
+          </div>
+          
+          <div class="info-group total">
+            <span class="label">💰 Total:</span>
+            <span class="amount">{{ formatearMoneda(reserva.total) }}</span>
+          </div>
+        </div>
+
+        <div class="reserva-footer">
+          <button 
+            *ngIf="puedeCancelar(reserva)" 
+            class="btn btn-cancel"
+            (click)="cancelarReserva(reserva.id)">
+            Cancelar Reserva
+          </button>
+          <a [routerLink]="['/facturas']" class="btn btn-secondary">Ver Factura</a>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!cargando && reservas.length === 0" class="empty-state">
+      <h2>No tienes reservas</h2>
+      <p>Comienza explorando nuestras habitaciones disponibles</p>
+      <a routerLink="/departamentos" class="btn btn-primary">Ver Habitaciones</a>
+    </div>
+  </div>
+</div>

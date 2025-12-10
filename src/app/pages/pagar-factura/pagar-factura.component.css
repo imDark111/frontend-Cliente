@@ -1,0 +1,465 @@
+.pagar-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Header */
+.header {
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  color: #1b5e20;
+  font-size: 28px;
+  margin: 10px 0;
+}
+
+.btn-volver {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #2e7d32;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.btn-volver:hover {
+  background: #f1f8f4;
+  transform: translateX(-3px);
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #2e7d32;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Información de factura */
+.info-factura {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.info-factura h2 {
+  color: #1b5e20;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-item .label {
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+.info-item .value {
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+.info-item .value.destacado {
+  color: #2e7d32;
+  font-size: 20px;
+}
+
+/* Alerta universitario */
+.alerta-universitario {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+  border: 2px solid #ffc107;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.icono-alerta {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.texto-alerta strong {
+  display: block;
+  color: #856404;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.texto-alerta p {
+  color: #856404;
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Formulario de pago */
+.formulario-pago {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.formulario-pago h2 {
+  color: #1b5e20;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+/* Card Element */
+.card-element-container {
+  margin-bottom: 20px;
+}
+
+.card-element-container label {
+  display: block;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.card-element {
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  background: white;
+  transition: border-color 0.3s;
+}
+
+.card-element:focus-within {
+  border-color: #2e7d32;
+  outline: none;
+}
+
+/* Formulario simulado */
+.formulario-tarjeta-simulado {
+  background: #f5f5f5;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.formulario-tarjeta-simulado .campo {
+  margin-bottom: 16px;
+}
+
+.formulario-tarjeta-simulado .campo:last-child {
+  margin-bottom: 0;
+}
+
+.formulario-tarjeta-simulado label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.input-tarjeta {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  font-family: 'Courier New', monospace;
+  background: #fff;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.input-tarjeta:disabled {
+  opacity: 0.7;
+}
+
+.input-activo {
+  color: #333;
+  cursor: text;
+  border: 2px solid #e0e0e0;
+  transition: border-color 0.3s;
+}
+
+.input-activo:focus {
+  outline: none;
+  border-color: #2e7d32;
+  background: #fafafa;
+}
+
+.input-error {
+  border-color: #ef5350 !important;
+}
+
+.campos-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.nota-simulacion {
+  margin: 12px 0 0 0;
+  padding: 8px 12px;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 4px;
+  color: #856404;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* Mensajes */
+.mensaje-error {
+  background: #ffebee;
+  border: 1px solid #ef5350;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 20px;
+  color: #c62828;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.mensaje-exito {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border: 2px solid #4caf50;
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.mensaje-exito svg {
+  color: #4caf50;
+  margin-bottom: 16px;
+}
+
+.mensaje-exito h3 {
+  color: #1b5e20;
+  font-size: 24px;
+  margin: 0 0 12px 0;
+}
+
+.mensaje-exito p {
+  color: #2e7d32;
+  margin: 0;
+}
+
+/* Botón de pago */
+.btn-pagar {
+  width: 100%;
+  background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.btn-pagar:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+.btn-pagar:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.spinner-small {
+  border: 3px solid #ffffff33;
+  border-top: 3px solid #ffffff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Tarjetas de prueba */
+.tarjetas-prueba {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 2px dashed #e0e0e0;
+}
+
+.toggle-tarjetas {
+  width: 100%;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #333;
+}
+
+.toggle-tarjetas:hover {
+  background: #eeeeee;
+  border-color: #bdbdbd;
+}
+
+.lista-tarjetas {
+  margin-top: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.tarjeta-item {
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.tarjeta-tipo {
+  font-weight: 600;
+  color: #1b5e20;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.tarjeta-numero {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.tarjeta-info {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.tarjeta-resultado {
+  font-size: 12px;
+  color: #2e7d32;
+  font-weight: 500;
+  background: #e8f5e9;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.tarjetas-header {
+  margin-bottom: 16px;
+}
+
+.tarjetas-header h3 {
+  color: #1b5e20;
+  font-size: 16px;
+  margin: 0 0 4px 0;
+}
+
+.tarjetas-header p {
+  color: #666;
+  font-size: 13px;
+  margin: 0;
+}
+
+.tarjeta-item.exito {
+  border-left: 4px solid #4caf50;
+}
+
+.tarjeta-item.error {
+  border-left: 4px solid #ef5350;
+  background: #fff5f5;
+}
+
+/* Seguridad */
+.seguridad-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #666;
+  font-size: 13px;
+  margin-top: 16px;
+}
+
+.seguridad-info svg {
+  color: #2e7d32;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .pagar-container {
+    padding: 15px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .alerta-universitario {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* Print styles */
+@media print {
+  .btn-volver,
+  .formulario-pago,
+  .alerta-universitario {
+    display: none;
+  }
+}

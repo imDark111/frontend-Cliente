@@ -1,0 +1,218 @@
+<div class="detalle-container" *ngIf="!cargando && factura">
+  <div class="factura-detalle">
+    <div class="header-actions no-print">
+      <button class="btn btn-back" (click)="volver()">← Volver</button>
+      <div class="action-buttons">
+        <button 
+          class="btn btn-success" 
+          (click)="irAPagar()"
+          *ngIf="factura.estadoPago !== 'pagada' && factura.estadoPago !== 'anulada'"
+        >
+          💳 Pagar Ahora
+        </button>
+        <button class="btn btn-secondary" (click)="imprimir()">🖨️ Imprimir</button>
+        <button class="btn btn-primary" (click)="descargarPDF()">📥 Descargar PDF</button>
+      </div>
+    </div>
+
+    <div class="factura-documento">
+      <!-- Encabezado -->
+      <div class="factura-header">
+        <div class="empresa-info">
+          <h1>🏨 Hotel Paraíso Verde</h1>
+          <p>Av. Principal #123, Ciudad</p>
+          <p>Teléfono: (02) 123-4567</p>
+          <p>Email: info@paraisoverde.com</p>
+        </div>
+        <div class="factura-info">
+          <h2>FACTURA</h2>
+          <p><strong>N°:</strong> {{ factura.numeroFactura }}</p>
+          <p><strong>Fecha:</strong> {{ formatearFecha(factura.fechaEmision) }}</p>
+          <p class="estado-badge" [ngClass]="factura.estadoPago">
+            {{ factura.estadoPago | titlecase }}
+          </p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Información del Cliente -->
+      <div class="cliente-info">
+        <h3>📋 Información del Cliente</h3>
+        <div class="info-grid" *ngIf="factura.cliente && typeof factura.cliente === 'object'">
+          <div class="info-item">
+            <strong>Nombre:</strong>
+            <span>{{ getClienteNombre() }}</span>
+          </div>
+          <div class="info-item">
+            <strong>Cédula:</strong>
+            <span>{{ getClienteCedula() }}</span>
+          </div>
+          <div class="info-item">
+            <strong>Email:</strong>
+            <span>{{ getClienteEmail() }}</span>
+          </div>
+          <div class="info-item">
+            <strong>Teléfono:</strong>
+            <span>{{ getClienteTelefono() }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Información de la Reserva -->
+      <div class="reserva-info" *ngIf="factura.reserva && typeof factura.reserva === 'object'">
+        <h3>🏨 Información de la Reserva</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <strong>Código de Reserva:</strong>
+            <span>{{ getReservaCodigoReserva() }}</span>
+          </div>
+          <div class="info-item">
+            <strong>Habitación:</strong>
+            <span>{{ getReservaDepartamento() }}</span>
+          </div>
+          <div class="info-item">
+            <strong>Check-in:</strong>
+            <span>{{ getReservaFechaInicio() }}</span>
+          </div>
+          <div class="info-item">
+            <strong>Check-out:</strong>
+            <span>{{ getReservaFechaFin() }}</span>
+          </div>
+          <div class="info-item">
+            <strong>Noches:</strong>
+            <span>{{ getReservaNumeroNoches() }}</span>
+          </div>
+          <div class="info-item">
+            <strong>Huéspedes:</strong>
+            <span>{{ getReservaNumeroHuespedes() }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Desglose de Costos -->
+      <div class="costos-section">
+        <h3>💰 Desglose de Costos</h3>
+        <table class="costos-table">
+          <thead>
+            <tr>
+              <th>Concepto</th>
+              <th class="text-right">Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Subtotal de Estadía</td>
+              <td class="text-right">{{ formatearMoneda(factura.subtotal) }}</td>
+            </tr>
+            <tr *ngIf="factura.descuentos.clienteFrecuente > 0" class="descuento">
+              <td>Descuento Cliente Frecuente</td>
+              <td class="text-right">-{{ formatearMoneda(factura.descuentos.clienteFrecuente) }}</td>
+            </tr>
+            <tr *ngIf="factura.descuentos.otros > 0" class="descuento">
+              <td>Otros Descuentos</td>
+              <td class="text-right">-{{ formatearMoneda(factura.descuentos.otros) }}</td>
+            </tr>
+            <tr *ngIf="factura.iva > 0">
+              <td>IVA (12%)</td>
+              <td class="text-right">{{ formatearMoneda(factura.iva) }}</td>
+            </tr>
+            <tr *ngIf="factura.recargos.feriado > 0" class="recargo">
+              <td>Recargo por Feriado</td>
+              <td class="text-right">+{{ formatearMoneda(factura.recargos.feriado) }}</td>
+            </tr>
+            <tr *ngIf="factura.recargos.otros > 0" class="recargo">
+              <td>Otros Recargos</td>
+              <td class="text-right">+{{ formatearMoneda(factura.recargos.otros) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Daños (si existen) -->
+      <div class="danos-section" *ngIf="factura.danos && factura.danos.length > 0">
+        <h3>⚠️ Cargos por Daños</h3>
+        <table class="costos-table">
+          <thead>
+            <tr>
+              <th>Descripción</th>
+              <th>Fecha</th>
+              <th class="text-right">Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dano of factura.danos" class="dano">
+              <td>{{ dano.descripcion }}</td>
+              <td>{{ formatearFecha(dano.fecha) }}</td>
+              <td class="text-right">{{ formatearMoneda(dano.monto) }}</td>
+            </tr>
+            <tr class="subtotal-danos">
+              <td colspan="2"><strong>Total Daños:</strong></td>
+              <td class="text-right"><strong>{{ formatearMoneda(factura.totalDanos) }}</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Total -->
+      <div class="total-section">
+        <div class="total-row">
+          <span class="total-label">TOTAL A PAGAR:</span>
+          <span class="total-amount">{{ formatearMoneda(factura.total) }}</span>
+        </div>
+      </div>
+
+      <!-- Pagos Realizados -->
+      <div class="pagos-section" *ngIf="factura.pagos && factura.pagos.length > 0">
+        <h3>💳 Pagos Realizados</h3>
+        <table class="costos-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Método</th>
+              <th>Referencia</th>
+              <th class="text-right">Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pago of factura.pagos">
+              <td>{{ formatearFecha(pago.fecha) }}</td>
+              <td>{{ pago.metodo | titlecase }}</td>
+              <td>{{ pago.referencia || '-' }}</td>
+              <td class="text-right">{{ formatearMoneda(pago.monto) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Observaciones -->
+      <div class="observaciones" *ngIf="factura.observaciones">
+        <h3>📝 Observaciones</h3>
+        <p>{{ factura.observaciones }}</p>
+      </div>
+
+      <!-- Pie de página -->
+      <div class="factura-footer">
+        <p>¡Gracias por su preferencia!</p>
+        <p class="nota">Este documento es una representación impresa de la factura electrónica</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="loading" *ngIf="cargando">
+  <div class="spinner"></div>
+  <p>Cargando factura...</p>
+</div>
+
+<!-- Error -->
+<div class="error-container" *ngIf="error && !cargando">
+  <span class="error-icon">⚠️</span>
+  <h2>{{ error }}</h2>
+  <button class="btn btn-primary" (click)="volver()">Volver a Facturas</button>
+</div>

@@ -1,0 +1,278 @@
+<div class="reserva-container">
+  <!-- Mensaje de Éxito -->
+  @if (exito) {
+    <div class="success-modal">
+      <div class="success-content">
+        <span class="success-icon">✅</span>
+        <h2>¡Reserva Confirmada!</h2>
+        <p>Tu reserva ha sido creada exitosamente</p>
+        <p class="redirect-msg">Redirigiendo a tus reservas...</p>
+      </div>
+    </div>
+  }
+
+  @if (!exito) {
+    <div class="content-wrapper">
+    <div class="header-section">
+      <button class="btn-back" (click)="cancelar()">← Volver</button>
+      <h1>🎯 Nueva Reserva</h1>
+      <p class="subtitle">Completa los datos para tu estadía</p>
+    </div>
+
+    @if (departamento && !cargando) {
+      <div class="reserva-grid">
+      <!-- Formulario de Reserva -->
+      <div class="form-section">
+        <div class="card">
+          <h2>📅 Información de la Reserva</h2>
+
+          @if (error) {
+            <div class="alert alert-error">
+              ⚠️ {{ error }}
+            </div>
+          }
+
+          <form class="reserva-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fechaInicio">Fecha de Entrada *</label>
+                <input
+                  type="date"
+                  id="fechaInicio"
+                  [(ngModel)]="fechaInicio"
+                  name="fechaInicio"
+                  [min]="fechaInicio"
+                  required
+                  (change)="editarFechas()"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="fechaFin">Fecha de Salida *</label>
+                <input
+                  type="date"
+                  id="fechaFin"
+                  [(ngModel)]="fechaFin"
+                  name="fechaFin"
+                  [min]="fechaInicio"
+                  required
+                  (change)="editarFechas()"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="numeroPersonas">Número de Personas *</label>
+              <div class="number-input">
+                <button
+                  type="button"
+                  class="btn-number"
+                  (click)="numeroPersonas = numeroPersonas > 1 ? numeroPersonas - 1 : 1"
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  id="numeroPersonas"
+                  [(ngModel)]="numeroPersonas"
+                  name="numeroPersonas"
+                  [min]="1"
+                  [max]="departamento.capacidadPersonas"
+                  required
+                />
+                <button
+                  type="button"
+                  class="btn-number"
+                  (click)="numeroPersonas = numeroPersonas < departamento.capacidadPersonas ? numeroPersonas + 1 : departamento.capacidadPersonas"
+                >
+                  +
+                </button>
+              </div>
+              <small>Capacidad máxima: {{ departamento.capacidadPersonas }} personas</small>
+            </div>
+
+            <div class="form-group">
+              <label for="observaciones">Observaciones (opcional)</label>
+              <textarea
+                id="observaciones"
+                [(ngModel)]="observaciones"
+                name="observaciones"
+                rows="4"
+                placeholder="Escribe cualquier solicitud especial..."
+              ></textarea>
+            </div>
+
+            @if (!mostrarResumen) {
+              <button
+                type="button"
+                class="btn-verificar"
+                (click)="verificarDisponibilidad()"
+                [disabled]="verificando || !fechaInicio || !fechaFin"
+              >
+                @if (!verificando) {
+                  <span>🔍 Verificar Disponibilidad</span>
+                }
+                @if (verificando) {
+                  <span>Verificando...</span>
+                }
+              </button>
+            }
+          </form>
+        </div>
+
+        <!-- Resumen de Reserva -->
+        @if (mostrarResumen && disponible) {
+          <div class="card resumen-card">
+          <h2>📋 Resumen de tu Reserva</h2>
+
+          <div class="resumen-item">
+            <span class="label">📅 Entrada:</span>
+            <span class="value">{{ formatearFecha(fechaInicio) }}</span>
+          </div>
+
+          <div class="resumen-item">
+            <span class="label">📅 Salida:</span>
+            <span class="value">{{ formatearFecha(fechaFin) }}</span>
+          </div>
+
+          <div class="resumen-item">
+            <span class="label">🌙 Noches:</span>
+            <span class="value">{{ numeroNoches }} noche(s)</span>
+          </div>
+
+          <div class="resumen-item">
+            <span class="label">👥 Personas:</span>
+            <span class="value">{{ numeroPersonas }} persona(s)</span>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="resumen-item">
+            <span class="label">Subtotal:</span>
+            <span class="value">{{ formatearMoneda(subtotal) }}</span>
+          </div>
+
+          <div class="resumen-item">
+            <span class="label">Impuestos (12%):</span>
+            <span class="value">{{ formatearMoneda(impuestos) }}</span>
+          </div>
+
+          <div class="resumen-item total">
+            <span class="label">Total:</span>
+            <span class="value">{{ formatearMoneda(total) }}</span>
+          </div>
+
+          <div class="resumen-actions">
+            <button
+              type="button"
+              class="btn-secondary"
+              (click)="editarFechas()"
+            >
+              Editar Fechas
+            </button>
+            <button
+              type="button"
+              class="btn-primary"
+              (click)="confirmarReserva()"
+              [disabled]="cargando"
+            >
+              @if (!cargando) {
+                <span>✓ Confirmar Reserva</span>
+              }
+              @if (cargando) {
+                <span>✓ Confirmar Reserva</span>
+              }
+              @if (cargando) {
+                <span>Procesando...</span>
+              }
+            </button>
+          </div>
+          </div>
+        }
+      </div>
+
+      <!-- Información del Departamento -->
+      <div class="depto-info-card">
+        <div class="card">
+          <div class="depto-header">
+            <img
+              [src]="departamento.imagenes && departamento.imagenes.length > 0 ? departamento.imagenes[0].url : 'assets/placeholder-room.jpg'"
+              [alt]="'Habitación ' + departamento.numero"
+              class="depto-imagen"
+            />
+            <div class="badge-tipo">{{ departamento.tipo | titlecase }}</div>
+          </div>
+
+          <div class="depto-content">
+            <h3>Habitación {{ departamento.numero }}</h3>
+            <p class="descripcion">{{ departamento.descripcion || 'Habitación cómoda y equipada' }}</p>
+
+            <div class="depto-detalles">
+              <div class="detalle">
+                <span class="icon">👥</span>
+                <span>{{ departamento.capacidadPersonas }} personas</span>
+              </div>
+              <div class="detalle">
+                <span class="icon">🛏️</span>
+                <span>{{ departamento.numeroCamas }} cama(s)</span>
+              </div>
+              <div class="detalle">
+                <span class="icon">🏢</span>
+                <span>Piso {{ departamento.piso }}</span>
+              </div>
+            </div>
+
+            <div class="precio-noche">
+              <span class="precio">{{ formatearMoneda(departamento.precioNoche) }}</span>
+              <span class="periodo">/ noche</span>
+            </div>
+
+            <div class="amenidades">
+              <h4>Comodidades:</h4>
+              <div class="amenidades-list">
+                @if (departamento.caracteristicas.wifi) {
+                  <span>📶 WiFi</span>
+                }
+                @if (departamento.caracteristicas.televisor) {
+                  <span>📺 TV</span>
+                }
+                @if (departamento.caracteristicas.aireAcondicionado) {
+                  <span>❄️ A/C</span>
+                }
+                @if (departamento.caracteristicas.minibar) {
+                  <span>🧊 Minibar</span>
+                }
+                @if (departamento.caracteristicas.balcon) {
+                  <span>🌿 Balcón</span>
+                }
+                @if (departamento.caracteristicas.banoPrivado) {
+                  <span>🚿 Baño</span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card politicas-card">
+          <h4>📋 Políticas de Reserva</h4>
+          <ul>
+            <li>✓ Check-in: 14:00 hrs</li>
+            <li>✓ Check-out: 12:00 hrs</li>
+            <li>✓ Cancelación gratuita 24h antes</li>
+            <li>✓ Confirmación inmediata</li>
+          </ul>
+        </div>
+      </div>
+      </div>
+    }
+
+    <!-- Loading State -->
+    @if (cargando) {
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Cargando información...</p>
+      </div>
+    }
+    </div>
+  }
+</div>

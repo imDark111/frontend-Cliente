@@ -1,0 +1,371 @@
+<div class="perfil-container">
+  <div class="perfil-card">
+    <div class="perfil-header">
+      <h1>Mi Perfil</h1>
+      @if (cliente) {
+        <p class="user-info">
+          <span class="badge-role">{{ cliente.rol }}</span>
+          @if (dobleAutenticacion) {
+            <span class="badge-2fa">🔐 2FA Activo</span>
+          }
+        </p>
+      }
+    </div>
+
+    <!-- Mensaje de Error -->
+    @if (error) {
+      <div class="alert alert-error">
+        ⚠️ {{ error }}
+      </div>
+    }
+
+    <!-- Mensaje de Éxito -->
+    @if (exito) {
+      <div class="alert alert-success">
+        ✅ {{ exito }}
+      </div>
+    }
+
+    <!-- Información del Perfil -->
+    @if (cliente && !mostrar2FA) {
+      <div class="perfil-section">
+      <div class="section-header">
+        <h2>📋 Información Personal</h2>
+        <button 
+          type="button" 
+          class="btn-icon" 
+          (click)="toggleEditar()"
+          [disabled]="cargando"
+        >
+          {{ editando ? '❌ Cancelar' : '✏️ Editar' }}
+        </button>
+      </div>
+
+      <form class="perfil-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Usuario</label>
+            <input 
+              type="text" 
+              [value]="cliente.nombreUsuario" 
+              disabled
+              class="disabled-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Email</label>
+            <input 
+              type="email" 
+              [value]="cliente.email" 
+              disabled
+              class="disabled-input"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombres</label>
+            <input 
+              type="text" 
+              [(ngModel)]="nombres" 
+              name="nombres"
+              [disabled]="!editando"
+              [class.disabled-input]="!editando"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Apellidos</label>
+            <input 
+              type="text" 
+              [(ngModel)]="apellidos" 
+              name="apellidos"
+              [disabled]="!editando"
+              [class.disabled-input]="!editando"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Cédula</label>
+            <input 
+              type="text" 
+              [value]="cliente.cedula" 
+              disabled
+              class="disabled-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Fecha de Nacimiento</label>
+            <input 
+              type="date" 
+              [(ngModel)]="fechaNacimiento" 
+              name="fechaNacimiento"
+              [disabled]="!editando"
+              [class.disabled-input]="!editando"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Teléfono</label>
+            <input 
+              type="tel" 
+              [(ngModel)]="telefono" 
+              name="telefono"
+              [disabled]="!editando"
+              [class.disabled-input]="!editando"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Dirección</label>
+            <input 
+              type="text" 
+              [(ngModel)]="direccion" 
+              name="direccion"
+              [disabled]="!editando"
+              [class.disabled-input]="!editando"
+            />
+          </div>
+        </div>
+
+        @if (editando) {
+          <div class="form-actions">
+            <button 
+              type="button" 
+              class="btn-secondary" 
+              (click)="toggleEditar()"
+              [disabled]="cargando"
+            >
+              Cancelar
+            </button>
+            <button 
+              type="button" 
+              class="btn-primary" 
+              (click)="guardarCambios()"
+              [disabled]="cargando"
+            >
+              @if (!cargando) {
+                <span>💾 Guardar Cambios</span>
+              }
+              @if (cargando) {
+                <span>Guardando...</span>
+              }
+            </button>
+          </div>
+        }
+      </form>
+      </div>
+    }
+
+    <!-- Cambiar Contraseña -->
+    @if (!mostrar2FA) {
+      <div class="perfil-section">
+      <div class="section-header">
+        <h2>🔒 Seguridad</h2>
+        <button 
+          type="button" 
+          class="btn-icon" 
+          (click)="cambiarPassword = !cambiarPassword"
+          [disabled]="cargando"
+        >
+          {{ cambiarPassword ? '❌ Cancelar' : '🔑 Cambiar Contraseña' }}
+        </button>
+      </div>
+
+      @if (cambiarPassword) {
+        <form class="perfil-form">
+        <div class="form-group">
+          <label>Contraseña Actual</label>
+          <input 
+            type="password" 
+            [(ngModel)]="passwordActual" 
+            name="passwordActual"
+            placeholder="Ingresa tu contraseña actual"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nueva Contraseña</label>
+            <input 
+              type="password" 
+              [(ngModel)]="passwordNuevo" 
+              name="passwordNuevo"
+              placeholder="Mínimo 6 caracteres"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Confirmar Contraseña</label>
+            <input 
+              type="password" 
+              [(ngModel)]="confirmarPassword" 
+              name="confirmarPassword"
+              placeholder="Repite la contraseña"
+            />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button 
+            type="button" 
+            class="btn-secondary" 
+            (click)="cambiarPassword = false"
+            [disabled]="cargando"
+          >
+            Cancelar
+          </button>
+          <button 
+            type="button" 
+            class="btn-primary" 
+            (click)="actualizarPassword()"
+            [disabled]="cargando"
+          >
+            @if (!cargando) {
+              <span>🔐 Actualizar Contraseña</span>
+            }
+            @if (cargando) {
+              <span>Actualizando...</span>
+            }
+          </button>
+        </div>
+        </form>
+      }
+      </div>
+    }
+
+    <!-- Autenticación en Dos Pasos -->
+    @if (!mostrar2FA) {
+      <div class="perfil-section">
+      <div class="section-header">
+        <h2>🔐 Autenticación en Dos Pasos (2FA)</h2>
+        <div class="twofa-status">
+          <span 
+            class="status-badge" 
+            [class.active]="dobleAutenticacion"
+            [class.inactive]="!dobleAutenticacion"
+          >
+            {{ dobleAutenticacion ? 'Activo' : 'Inactivo' }}
+          </span>
+        </div>
+      </div>
+
+      <p class="section-description">
+        La autenticación en dos pasos añade una capa extra de seguridad a tu cuenta.
+        Necesitarás un código de tu aplicación de autenticación cada vez que inicies sesión.
+      </p>
+
+      <div class="twofa-actions">
+        @if (!dobleAutenticacion) {
+          <button 
+            type="button" 
+            class="btn-primary" 
+            (click)="habilitar2FA()"
+            [disabled]="cargando"
+          >
+            🔐 Habilitar 2FA
+          </button>
+        }
+
+        @if (dobleAutenticacion) {
+          <button 
+            type="button" 
+            class="btn-danger" 
+            (click)="deshabilitar2FA()"
+            [disabled]="cargando"
+          >
+            🔓 Deshabilitar 2FA
+          </button>
+        }
+      </div>
+      </div>
+    }
+
+    <!-- Configuración 2FA -->
+    @if (mostrar2FA) {
+      <div class="twofa-setup">
+      <h2>Configurar Autenticación en Dos Pasos</h2>
+      
+      <div class="setup-steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Descarga una aplicación de autenticación</h3>
+            <p>Recomendamos Google Authenticator, Microsoft Authenticator o Authy</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Escanea el código QR</h3>
+            <div class="qr-container">
+              <img [src]="qrCode" alt="QR Code" class="qr-code" />
+            </div>
+            <p class="secret-key">
+              <strong>Clave secreta:</strong> {{ secreto2FA }}
+            </p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Ingresa el código de verificación</h3>
+            <div class="form-group">
+              <input 
+                type="text" 
+                [(ngModel)]="codigo2FA" 
+                name="codigo2FA"
+                placeholder="000000"
+                maxlength="6"
+                class="code-input"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button 
+          type="button" 
+          class="btn-secondary" 
+          (click)="cancelar2FA()"
+          [disabled]="cargando"
+        >
+          Cancelar
+        </button>
+        <button 
+          type="button" 
+          class="btn-primary" 
+          (click)="verificar2FA()"
+          [disabled]="cargando || codigo2FA.length !== 6"
+        >
+          @if (!cargando) {
+            <span>✅ Verificar y Activar</span>
+          }
+          @if (cargando) {
+            <span>Verificando...</span>
+          }
+        </button>
+      </div>
+      </div>
+    }
+
+    <!-- Botón Cerrar Sesión -->
+    @if (!mostrar2FA) {
+      <div class="logout-section">
+        <button type="button" class="btn-logout" (click)="cerrarSesion()">
+          🚪 Cerrar Sesión
+        </button>
+      </div>
+    }
+  </div>
+</div>

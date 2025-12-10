@@ -1,0 +1,175 @@
+@if (!cargando && departamento) {
+  <div class="detalle-container">
+    <!-- Galería de Imágenes -->
+    <section class="galeria-section">
+      @if (getImagenesValidas().length > 0) {
+        <div class="galeria-principal">
+          @if (getImagenesValidas().length > 1) {
+            <button class="nav-btn prev" (click)="imagenAnterior()">
+              &#10094;
+            </button>
+          }
+          <img [src]="getImagenesValidas()[imagenActual]" [alt]="'Habitación ' + departamento.numero" class="imagen-principal" />
+          @if (getImagenesValidas().length > 1) {
+            <button class="nav-btn next" (click)="imagenSiguiente()">
+              &#10095;
+            </button>
+          }
+          <div class="badge-estado" [class.disponible]="departamento.estado === 'disponible'">
+            {{ departamento.estado | titlecase }}
+          </div>
+        </div>
+      }
+      
+      @if (getImagenesValidas().length > 1) {
+        <div class="galeria-miniaturas">
+          @for (imagen of getImagenesValidas(); track $index) {
+            <img 
+              [src]="imagen"
+              [alt]="'Miniatura ' + $index"
+              class="miniatura"
+              [class.active]="$index === imagenActual"
+              (click)="cambiarImagen($index)"
+            />
+          }
+        </div>
+      }
+    </section>
+
+  <div class="contenido-wrapper">
+    <!-- Información Principal -->
+    <div class="info-principal">
+      <div class="header-info">
+        <div>
+          <h1>Habitación {{ departamento.numero }}</h1>
+          <p class="tipo-badge">{{ departamento.tipo | titlecase }}</p>
+        </div>
+        <button class="btn-volver" (click)="volver()">← Volver</button>
+      </div>
+
+      @if (departamento.descripcion) {
+        <p class="descripcion">
+          {{ departamento.descripcion }}
+        </p>
+      }
+
+      <!-- Detalles Rápidos -->
+      <div class="detalles-rapidos">
+        <div class="detalle-item">
+          <span class="icono">👥</span>
+          <div>
+            <p class="label">Capacidad</p>
+            <p class="valor">{{ departamento.capacidadPersonas }} personas</p>
+          </div>
+        </div>
+        <div class="detalle-item">
+          <span class="icono">🛏️</span>
+          <div>
+            <p class="label">Camas</p>
+            <p class="valor">{{ departamento.numeroCamas }} {{ departamento.tipoCamas }}</p>
+          </div>
+        </div>
+        <div class="detalle-item">
+          <span class="icono">🏢</span>
+          <div>
+            <p class="label">Ubicación</p>
+            <p class="valor">Piso {{ departamento.piso }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Características -->
+      <div class="caracteristicas-section">
+        <h2>🌟 Características y Comodidades</h2>
+        <div class="caracteristicas-grid">
+          @for (car of getCaracteristicasActivas(); track car.nombre) {
+            <div class="caracteristica-item">
+              <span class="car-icono">{{ car.icono }}</span>
+              <span class="car-nombre">{{ car.nombre }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Observaciones -->
+      @if (departamento.observaciones) {
+        <div class="observaciones-section">
+          <h2>📝 Información Adicional</h2>
+          <p>{{ departamento.observaciones }}</p>
+        </div>
+      }
+
+      <!-- Políticas -->
+      <div class="politicas-section">
+        <h2>📋 Políticas del Hotel</h2>
+        <ul>
+          <li>✅ Check-in: 14:00 hrs</li>
+          <li>✅ Check-out: 12:00 hrs</li>
+          <li>✅ Cancelación gratuita hasta 24 horas antes</li>
+          <li>✅ No se permiten mascotas</li>
+          <li>✅ No fumar en las habitaciones</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Panel de Reserva -->
+    <div class="panel-reserva">
+      <div class="precio-card">
+        <div class="precio-principal">
+          <span class="precio-valor">{{ formatearMoneda(departamento.precioNoche) }}</span>
+          <span class="precio-periodo">/ noche</span>
+        </div>
+        
+        <div class="precio-info">
+          <p>💰 Precio base por noche</p>
+          <p>🏷️ Impuestos incluidos</p>
+        </div>
+
+        <button 
+          class="btn-reservar" 
+          (click)="reservar()"
+          [disabled]="departamento.estado !== 'disponible'"
+        >
+          @if (departamento.estado === 'disponible') {
+            <span>🎯 Reservar Ahora</span>
+          }
+          @if (departamento.estado !== 'disponible') {
+            <span>❌ No Disponible</span>
+          }
+        </button>
+
+        <div class="beneficios">
+          <p>✓ Confirmación inmediata</p>
+          <p>✓ Cancelación flexible</p>
+          <p>✓ Mejor precio garantizado</p>
+        </div>
+      </div>
+
+      <div class="contacto-card">
+        <h3>💬 ¿Necesitas ayuda?</h3>
+        <p>Nuestro equipo está disponible 24/7</p>
+        <button class="btn-contacto">📞 Contactar</button>
+      </div>
+    </div>
+  </div>
+  </div>
+}
+
+<!-- Loading State -->
+@if (cargando) {
+  <div class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando información...</p>
+  </div>
+}
+
+<!-- Error State -->
+@if (error && !cargando) {
+  <div class="error-container">
+    <div class="error-content">
+      <span class="error-icon">⚠️</span>
+      <h2>{{ error }}</h2>
+      <button class="btn-volver" (click)="volver()">Volver a Habitaciones</button>
+    </div>
+  </div>
+}

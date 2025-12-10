@@ -1,0 +1,201 @@
+<div class="register-container">
+  <div class="register-card">
+    <div class="logo-section">
+      <h1>🏨 Paraíso Verde</h1>
+      <p class="subtitle">Sistema de Reservas</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="register-form">
+      <h2>Crear Cuenta</h2>
+
+      <!-- Información de Cuenta -->
+      <div class="form-section">
+        <h3>Información de Cuenta</h3>
+        
+        <div class="form-group">
+          <label for="nombreUsuario">Nombre de Usuario *</label>
+          <input 
+            type="text" 
+            id="nombreUsuario" 
+            [(ngModel)]="nombreUsuario" 
+            name="nombreUsuario"
+            placeholder="usuario123"
+            required
+            autocomplete="username"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Correo Electrónico *</label>
+          <input 
+            type="email" 
+            id="email" 
+            [(ngModel)]="email" 
+            name="email"
+            placeholder="correo@ejemplo.com"
+            required
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="password">Contraseña *</label>
+            <div class="password-input">
+              <input 
+                [type]="mostrarPassword ? 'text' : 'password'" 
+                id="password" 
+                [(ngModel)]="password" 
+                name="password"
+                placeholder="Mínimo 6 caracteres"
+                required
+                autocomplete="new-password"
+              />
+              <button 
+                type="button" 
+                class="toggle-password" 
+                (click)="togglePassword()"
+                tabindex="-1"
+              >
+                {{ mostrarPassword ? '👁️' : '👁️‍🗨️' }}
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirmar Contraseña *</label>
+            <div class="password-input">
+              <input 
+                [type]="mostrarConfirmPassword ? 'text' : 'password'" 
+                id="confirmPassword" 
+                [(ngModel)]="confirmPassword" 
+                name="confirmPassword"
+                placeholder="Repite la contraseña"
+                required
+                autocomplete="new-password"
+              />
+              <button 
+                type="button" 
+                class="toggle-password" 
+                (click)="toggleConfirmPassword()"
+                tabindex="-1"
+              >
+                {{ mostrarConfirmPassword ? '👁️' : '👁️‍🗨️' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información Personal -->
+      <div class="form-section">
+        <h3>Información Personal</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombres">Nombres *</label>
+            <input 
+              type="text" 
+              id="nombres" 
+              [(ngModel)]="nombres" 
+              name="nombres"
+              placeholder="Juan Carlos"
+              required
+              autocomplete="given-name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="apellidos">Apellidos *</label>
+            <input 
+              type="text" 
+              id="apellidos" 
+              [(ngModel)]="apellidos" 
+              name="apellidos"
+              placeholder="Pérez González"
+              required
+              autocomplete="family-name"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cedula">Cédula *</label>
+            <input 
+              type="text" 
+              id="cedula" 
+              [(ngModel)]="cedula" 
+              name="cedula"
+              placeholder="1234567890"
+              maxlength="10"
+              pattern="[0-9]{10}"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="fechaNacimiento">Fecha de Nacimiento</label>
+            <input 
+              type="date" 
+              id="fechaNacimiento" 
+              [(ngModel)]="fechaNacimiento" 
+              name="fechaNacimiento"
+              autocomplete="bday"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Información de Contacto -->
+      <div class="form-section">
+        <h3>Información de Contacto</h3>
+        
+        <div class="form-group">
+          <label for="telefono">Teléfono</label>
+          <input 
+            type="tel" 
+            id="telefono" 
+            [(ngModel)]="telefono" 
+            name="telefono"
+            placeholder="0987654321"
+            maxlength="10"
+            pattern="[0-9]{10}"
+            autocomplete="tel"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="direccion">Dirección</label>
+          <textarea 
+            id="direccion" 
+            [(ngModel)]="direccion" 
+            name="direccion"
+            placeholder="Calle, Número, Ciudad..."
+            rows="3"
+            autocomplete="street-address"
+          ></textarea>
+        </div>
+      </div>
+
+      @if (error) {
+        <div class="error-message">
+          ⚠️ {{ error }}
+        </div>
+      }
+
+      <button type="submit" class="btn-primary" [disabled]="cargando">
+        @if (!cargando) {
+          <span>Registrarse</span>
+        }
+        @if (cargando) {
+          <span>Creando cuenta...</span>
+        }
+      </button>
+
+      <div class="login-link">
+        ¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión aquí</a>
+      </div>
+    </form>
+  </div>
+</div>
