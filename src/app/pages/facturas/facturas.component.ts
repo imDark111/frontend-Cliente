@@ -23,6 +23,7 @@ export class FacturasComponent implements OnInit {
   }
 
   cargarFacturas() {
+    // Usar obtenerFacturas que ya filtra por usuario automáticamente en el backend
     this.facturaService.obtenerFacturas().subscribe({
       next: (response: any) => {
         if (response.success && response.data) {
@@ -34,7 +35,7 @@ export class FacturasComponent implements OnInit {
         this.cargando = false;
       },
       error: (error: any) => {
-        console.error('Error:', error);
+        console.error('❌ Error al cargar facturas:', error);
         this.error = 'Error al cargar facturas';
         this.cargando = false;
       }
