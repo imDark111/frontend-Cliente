@@ -15,7 +15,7 @@
     <div class="content-wrapper">
     <div class="header-section">
       <button class="btn-back" (click)="cancelar()">← Volver</button>
-      <h1>🎯 Nueva Reserva</h1>
+      <h1>Nueva Reserva</h1>
       <p class="subtitle">Completa los datos para tu estadía</p>
     </div>
 
@@ -110,7 +110,7 @@
                 [disabled]="verificando || !fechaInicio || !fechaFin"
               >
                 @if (!verificando) {
-                  <span>🔍 Verificar Disponibilidad</span>
+                  <span>Verificar Disponibilidad</span>
                 }
                 @if (verificando) {
                   <span>Verificando...</span>

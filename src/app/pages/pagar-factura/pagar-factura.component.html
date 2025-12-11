@@ -7,7 +7,7 @@
       </svg>
       Volver
     </button>
-    <h1>💳 Pagar Factura</h1>
+    <h1>Pagar Factura</h1>
   </div>
 
   <!-- Mensaje de carga -->
@@ -146,7 +146,7 @@
         [disabled]="procesandoPago || !paymentIntentId"
       >
         <span *ngIf="!procesandoPago">
-          💳 Pagar {{ formatearMoneda(calcularMontoPendiente()) }}
+           Pagar {{ formatearMoneda(calcularMontoPendiente()) }}
         </span>
         <span *ngIf="procesandoPago">
           <div class="spinner-small"></div>
@@ -157,7 +157,7 @@
       <!-- Tarjetas de prueba -->
       <div class="tarjetas-prueba">
         <div class="tarjetas-header">
-          <h3>📋 Tarjetas de Prueba</h3>
+          <h3>Tarjetas de Prueba</h3>
           <p>Copia estos números para probar diferentes escenarios</p>
         </div>
         

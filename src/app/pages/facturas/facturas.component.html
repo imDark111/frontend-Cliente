@@ -35,7 +35,7 @@
         </div>
 
         <div class="info-row" *ngIf="factura.reserva && typeof factura.reserva === 'object'">
-          <span class="label">🏨 Reserva:</span>
+          <span class="label">Reserva:</span>
           <span class="value">{{ factura.reserva.codigoReserva || 'N/A' }}</span>
         </div>
 
@@ -82,7 +82,7 @@
           📥 Descargar PDF
         </button>
         <a [routerLink]="['/facturas', factura.id]" class="btn btn-secondary">
-          👁️ Ver Detalles
+          Ver Detalles
         </a>
       </div>
 
