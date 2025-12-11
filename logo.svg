@@ -1,0 +1,23 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="256" cy="256" r="256" fill="#10b981"/>
+  <g fill="#ffffff">
+    <!-- Palmera izquierda -->
+    <path d="M180 320 L180 240 Q180 235 185 235 Q190 235 190 240 L190 320 Z"/>
+    <ellipse cx="160" cy="200" rx="30" ry="15" transform="rotate(-30 160 200)"/>
+    <ellipse cx="150" cy="220" rx="35" ry="15" transform="rotate(-50 150 220)"/>
+    <ellipse cx="180" cy="190" rx="30" ry="15" transform="rotate(-10 180 190)"/>
+    <ellipse cx="200" cy="210" rx="35" ry="15" transform="rotate(20 200 210)"/>
+    <ellipse cx="210" cy="230" rx="30" ry="15" transform="rotate(40 210 230)"/>
+    
+    <!-- Palmera derecha -->
+    <path d="M350 340 L350 250 Q350 245 355 245 Q360 245 360 250 L360 340 Z"/>
+    <ellipse cx="330" cy="210" rx="30" ry="15" transform="rotate(-30 330 210)"/>
+    <ellipse cx="320" cy="230" rx="35" ry="15" transform="rotate(-50 320 230)"/>
+    <ellipse cx="350" cy="200" rx="30" ry="15" transform="rotate(-10 350 200)"/>
+    <ellipse cx="370" cy="220" rx="35" ry="15" transform="rotate(20 370 220)"/>
+    <ellipse cx="380" cy="240" rx="30" ry="15" transform="rotate(40 380 240)"/>
+    
+    <!-- Isla -->
+    <ellipse cx="256" cy="360" rx="180" ry="40" fill="#ffffff"/>
+  </g>
+</svg>
